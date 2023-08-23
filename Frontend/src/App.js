@@ -20,6 +20,7 @@ import { Provider } from 'react-redux';
 import store from './store';
 import { loadUser } from './actions/auth';
 import setAuthToken from './utils/setAuthToken';
+import { LOGOUT } from './actions/types';
 
 import './App.css';
 
@@ -29,14 +30,20 @@ if(localStorage.token){
 
 const App = () =>{
   useEffect(()=>{
+    if(localStorage.token){
+      setAuthToken(localStorage.token);
+    }    
     store.dispatch(loadUser());
+    window.addEventListener('storage', () => {
+      if (!localStorage.token) store.dispatch({ type: LOGOUT });
+    });
   }, []);
 
   return(
   <Provider store={store}>
     <Router>
         <Navbar/>
-          <section className = "container">
+          <div className = "container">
             <Alert/>
             <Routes>
               <Route path ="/" element = { <Landing/>}/>
@@ -51,8 +58,9 @@ const App = () =>{
               <Route path ="add-education" element = {<PrivateRoute component = {AddEducation}/>}/>
               <Route path ="posts" element = {<PrivateRoute component = {Posts}/>}/>
               <Route path ="posts/:id" element = {<PrivateRoute component = {Post}/>}/>
+              {/* <Route path="/*" element={<NotFound />} /> */}
             </Routes>
-          </section>
+          </div>
     </Router>
   </Provider>
 )};
