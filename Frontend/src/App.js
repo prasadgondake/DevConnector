@@ -46,6 +46,7 @@ const App = () =>{
           <div className = "container">
             <Alert/>
             <Routes>
+            {/* <div className = "container"> */}
               <Route path ="/" element = { <Landing/>}/>
               <Route path ="register" element = { <Register/>}/>
               <Route path ="login" element = { <Login/>}/>
